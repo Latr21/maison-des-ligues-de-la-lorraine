@@ -1,0 +1,11 @@
+
+/Maison-des-ligues/back/node_modules
+/Maison-des-ligues/back/.env
+/Maison-des-ligues/node_modules
+/Maison-des-ligues/back/uploads
+/Maison-des-ligues/back/test
+/Maison-des-ligues/back/*.html
+/Maison-des-ligues/back/jest-html-reporters-attach
+/Maison-des-ligues/maison-des-ligues/node_modules
+/Maison-des-ligues/maison-des-ligues/package-lock.json
+/Maison-des-ligues/back/package-lock.json

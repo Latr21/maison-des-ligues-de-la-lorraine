@@ -1,0 +1,28 @@
+.img_profil {
+  width: 35px;
+  margin-right: 50px;
+  margin-top: -11px;
+}
+
+.bouton-profil {
+  display: flex;
+  flex-direction: column;
+  border: 2px solid black;
+  border-radius: 10px;
+  background-color: #FFD700;
+  padding: 10px;
+  position: absolute;
+  right: 0px;
+  width: 250px;
+  top: 70px;
+}
+
+button {
+    border: none;
+    background-color: transparent;
+    color: black;
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+
