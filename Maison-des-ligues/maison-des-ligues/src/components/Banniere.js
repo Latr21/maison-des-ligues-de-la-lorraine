@@ -27,10 +27,10 @@ function Banniere() {
             <ul className='banniere-ul'>
                 <li><Link to="/acceuil">Acceuil</Link></li>
                 <li><Link to="/shop">Shop</Link></li>
-                
+
                 {/* Vérifiez si l'utilisateur est administrateur */}
                 {isAdmin && <li><Link to="/admin/dashboard">Admin</Link></li>}
-                
+
                 <div className='logogo'>
                     {/* Affichez le lien vers le panier uniquement si l'utilisateur est connecté */}
 

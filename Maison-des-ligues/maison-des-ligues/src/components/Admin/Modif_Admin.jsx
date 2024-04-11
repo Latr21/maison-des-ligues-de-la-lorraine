@@ -9,7 +9,7 @@ const Modif_Admin = () => {
     const [newPassword, setNewPassword] = useState('');
 
     useEffect(() => {
-        fetch("http://localhost:3000/api/usersroute/administrateurs")
+        fetch("http://192.168.1.37:3000/api/usersroute/administrateurs")
             .then((response) => response.json())
             .then((data) => setAdministrateurs(data))
             .catch((error) => console.error(error));
@@ -20,7 +20,7 @@ const Modif_Admin = () => {
             // Cryptez le nouveau mot de passe avec bcryptjs
             const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-            const response = await fetch('http://localhost:3000/api/usersroute/modifieradmin', {
+            const response = await fetch('http://192.168.1.37:3000/api/usersroute/modifieradmin', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -7,12 +7,12 @@ function Dashboard() {
     const [userCount, setUserCount] = useState(0);
 
     useEffect(() => {
-        fetch("http://localhost:3000/api/produitsroute/produit")
+        fetch("http://192.168.1.37:3000/api/produitsroute/produit")
             .then((response) => response.json())
             .then((data) => setProductCount(data.length))
             .catch((error) => console.error(error));
 
-        fetch("http://localhost:3000/api/usersroute/utilisateurs")
+        fetch("http://192.168.1.37:3000/api/usersroute/utilisateurs")
             .then((response) => response.json())
             .then((data) => setUserCount(data.length))
             .catch((error) => console.error(error));
