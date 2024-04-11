@@ -13,6 +13,7 @@ const storage = multer.diskStorage({
     },
     filename: function (req, file, cb) {
         cb(null, Date.now() + path.extname(file.originalname));
+        console.log(Date.now() + path.extname(file.originalname))
     },
 });
 
@@ -42,5 +43,6 @@ app.post('/ajout', (req, res) => {
 // Endpoint pour récupérer le contenu du panier
 app.get('/panier', produitscontroller.getContenuPanier);
 app.put('/produit/:pid', upload.single('image'), produitscontroller.updateProduct);
+app.get('/PrixTotalPanier', produitscontroller.getPrixTotalPanier);
 
 module.exports = app;

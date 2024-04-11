@@ -67,6 +67,8 @@ exports.updateProduct = async (req, res) => {
     const image = req.file ? req.file.path : null;
 
     try {
+        console.log('ID du produit à mettre à jour :', pid);
+        console.log('Nouvelles données du produit :', { name, details, price, quantity, image });
         if (!name) {
             console.log('Le champ "Name" est manquant.');
             return res.status(400).json({ error: 'Le champ "Name" est manquant.' });
@@ -95,6 +97,8 @@ exports.updateProduct = async (req, res) => {
         updateQuery += ' WHERE pid = ?';
         queryParams.push(pid);
 
+        console.log('Requête de mise à jour :', updateQuery);
+        console.log('Paramètres de la requête :', queryParams)
         const [result] = await db.execute(updateQuery, queryParams);
 
         if (result.affectedRows > 0) {
@@ -178,4 +182,20 @@ exports.supprimerproduit = async (req, res) => {
         console.error(error);
         res.status(500).json({ error: 'Une erreur s\'est produite lors de la suppression du produit' });
     }
-}; 3
+};
+
+exports.getPrixTotalPanier = async (req, res) => {
+    try {
+        const [countRows] = await db.query('SELECT SUM(price) AS total_count FROM panier');
+        //verif
+        if (countRows.length > 0 && countRows[0].total_count !== null) {
+            const totalCount = countRows[0].total_count;
+            res.status(200).json({ total_count: totalCount });
+        } else {
+            res.status(404).json({ error: 'Aucun produit dans le panier' });
+        }
+    } catch (error) {
+        console.error('Erreur lors de la récupération du nombre total de prix dans le panier:', error);
+        res.status(500).json({ error: 'Une erreur s\'est produite lors de la récupération du nombre total de prix dans le panier' });
+    }
+};

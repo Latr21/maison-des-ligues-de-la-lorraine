@@ -11,9 +11,6 @@ const Produits = () => {
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [error, setError] = useState(null);
 
-    // Nouvel état pour stocker les informations du produit sélectionné pour la modification
-    const [editProduct, setEditProduct] = useState(null);
-
     useEffect(() => {
         fetch("http://localhost:3000/api/produitsroute/produit")
             .then((response) => response.json())
@@ -35,58 +32,69 @@ const Produits = () => {
         }
     };
 
-    // Gestionnaire de sélection d'un produit pour la modification
-    const handleEditProduct = (product) => {
-        setEditProduct(product);
-        setSelectedProduct(product);
-        setName(product.name);
-        setDetails(product.details);
-        setPrice(product.price);
-        setQuantity(product.quantity);
-        // Réinitialiser l'image pour éviter les problèmes de cache dans le formulaire de modification
-        setImage(null);
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
+    const handleAddProduct = async () => {
         const formDataToSend = new FormData();
         formDataToSend.append('name', name);
         formDataToSend.append('details', details);
         formDataToSend.append('price', price);
         formDataToSend.append('image', image);
-        formDataToSend.append('quantity', quantity); // Ajout de la quantité dans les données à envoyer
+        formDataToSend.append('quantity', quantity);
 
         try {
-            if (selectedProduct) {
-                const response = await fetch(`http://localhost:3000/api/produitsroute/produit/${selectedProduct.pid}`, {
-                    method: 'PUT', // Utilisation de la méthode PUT pour la mise à jour
-                    body: formDataToSend,
-                });
+            const response = await fetch('http://localhost:3000/api/produitsroute/produit', {
+                method: 'POST',
+                body: formDataToSend,
+            });
 
-                if (response.ok) {
-                    // Mise à jour de l'état du produit modifié
-                    const updatedProduct = await response.json();
-                    const updatedProducts = products.map(product =>
-                        product.pid === updatedProduct.pid ? updatedProduct : product
-                    );
-                    setProducts(updatedProducts);
+            if (response.ok) {
+                const newProduct = await response.json();
+                setProducts([...products, newProduct]);
 
-                    // Réinitialisation des champs du formulaire
-                    setName('');
-                    setDetails('');
-                    setPrice('');
-                    setImage(null);
-                    setQuantity('');
-                    setSelectedProduct(null);
-                    // Réinitialiser l'état du produit en cours de modification
-                    setEditProduct(null);
-                } else {
-                    console.error('Erreur lors de la mise à jour du produit :', response.statusText);
-                    setError('Erreur lors de la mise à jour du produit.');
-                }
+                setName('');
+                setDetails('');
+                setPrice('');
+                setImage(null);
+                setQuantity('');
             } else {
-                // Logique d'ajout d'un nouveau produit (inchangée)
+                console.error('Erreur lors de l\'ajout du produit :', response.statusText);
+                setError('Erreur lors de l\'ajout du produit.');
+            }
+        } catch (error) {
+            console.error('Erreur lors de la soumission du formulaire :', error);
+            setError('Une erreur s\'est produite lors de la soumission du formulaire.');
+        }
+    };
+
+    const handleUpdateProduct = async () => {
+        const formDataToSend = new FormData();
+        formDataToSend.append('name', name);
+        formDataToSend.append('details', details);
+        formDataToSend.append('price', price);
+        formDataToSend.append('image', image);
+        formDataToSend.append('quantity', quantity);
+
+        try {
+            const response = await fetch(`http://localhost:3000/api/produitsroute/produit/${selectedProduct.pid}`, {
+                method: 'PUT',
+                body: formDataToSend,
+            });
+
+            if (response.ok) {
+                const updatedProduct = await response.json();
+                const updatedProducts = products.map(product =>
+                    product.pid === updatedProduct.pid ? updatedProduct : product
+                );
+                setProducts(updatedProducts);
+
+                setName('');
+                setDetails('');
+                setPrice('');
+                setImage(null);
+                setQuantity('');
+                setSelectedProduct(null);
+            } else {
+                console.error('Erreur lors de la mise à jour du produit :', response.statusText);
+                setError('Erreur lors de la mise à jour du produit.');
             }
         } catch (error) {
             console.error('Erreur lors de la soumission du formulaire :', error);
@@ -112,11 +120,20 @@ const Produits = () => {
         }
     };
 
+    const handleEditProduct = (product) => {
+        setSelectedProduct(product);
+        setName(product.name);
+        setDetails(product.details);
+        setPrice(product.price);
+        setQuantity(product.quantity);
+        setImage(null);
+    };
+
     return (
         <section className="add-products">
             <h1>Ajouter/Modifier un produit</h1>
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={(e) => e.preventDefault()}>
                 <div className="flex">
                     <div className="inputBox">
                         <span>Nom du produit </span>
@@ -138,7 +155,7 @@ const Produits = () => {
                         <span>Description du produit </span>
                         <textarea name="details" placeholder="Entrer la description du produit" className="box" required maxLength="500" cols="30" rows="10" value={details} onChange={handleChange} />
                     </div>
-                    <input type="submit" value={selectedProduct ? "Modifier le produit" : "Ajouter le produit"} className="btn" name="add_product" />
+                    <button type="button" onClick={selectedProduct ? handleUpdateProduct : handleAddProduct}>{selectedProduct ? "Modifier le produit" : "Ajouter le produit"}</button>
                 </div>
             </form>
             <h1>Liste des Produits :</h1>
@@ -157,21 +174,6 @@ const Produits = () => {
                     </div>
                 ))}
             </div>
-
-            {/* Nouveau formulaire pour modifier un produit */}
-            {editProduct && (
-                <form onSubmit={handleSubmit}>
-                    {/* Vous pouvez concevoir ce formulaire selon vos besoins */}
-                    {/* Par exemple, vous pouvez afficher les valeurs actuelles du produit sélectionné pour la modification */}
-                    {/* Vous pouvez également ajouter des champs supplémentaires si nécessaire */}
-                    <input type="text" value={name} onChange={handleChange} name="name" />
-                    <input type="text" value={details} onChange={handleChange} name="details" />
-                    <input type="number" value={price} onChange={handleChange} name="price" />
-                    <input type="number" value={quantity} onChange={handleChange} name="quantity" />
-                    <input type="file" onChange={handleChange} name="image" />
-                    <button type="submit">Valider la modification</button>
-                </form>
-            )}
         </section>
     );
 };
