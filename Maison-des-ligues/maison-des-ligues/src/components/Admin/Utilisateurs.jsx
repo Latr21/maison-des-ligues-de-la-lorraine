@@ -10,7 +10,7 @@ function Utilisateurs() {
 
     const fetchUsers = async () => {
         try {
-            const response = await fetch("http://192.168.1.17:3000/api/usersroute/utilisateurs");
+            const response = await fetch("http://192.168.1.37:3000/api/usersroute/utilisateurs");
             if (!response.ok) {
                 throw new Error("Erreur lors de la récupération des utilisateurs");
             }
@@ -25,7 +25,7 @@ function Utilisateurs() {
         try {
             const token = Cookies.get('token'); // Récupérez le token JWT depuis le cookie
 
-            const response = await fetch(`http://192.168.1.17:3000/api/usersroute/utilisateurs/${uid}`, {
+            const response = await fetch(`http://192.168.1.37:3000/api/usersroute/utilisateurs/${uid}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`, // Inclure le token JWT dans l'en-tête Authorization

@@ -17,7 +17,7 @@ const InscriptionForm = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch('http://192.168.1.17:3000/api/usersroute/inscription', {
+            const response = await fetch('http://192.168.1.37:3000/api/usersroute/inscription', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
