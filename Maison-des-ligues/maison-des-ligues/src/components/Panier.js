@@ -22,7 +22,7 @@ function Panier() {
             const decodedToken = jwtDecode(token);
             console.log('Decoded Token:', decodedToken); // Ajout du console.log pour afficher decodedToken
 
-            const response = await axios.get('http://192.168.1.37:3000/api/produitsroute/panier', {
+            const response = await axios.get('http://192.168.1.17:3000/api/produitsroute/panier', {
                 params: { uid: decodedToken.uid }
             });
             setPanier(response.data); // Met à jour l'état du panier avec les données récupérées depuis le backend
@@ -38,7 +38,7 @@ function Panier() {
                 {panier.map((produit, index) => (
                     <li key={index} className="produit">
                         <div className="produit-info">
-                            <img src={`http://192.168.1.37:3000/${produit.image}`} alt={produit.name} />
+                            <img src={`http://192.168.1.17:3000/${produit.image}`} alt={produit.name} />
                             <span className="produit-nom">{produit.name}</span>
                             <span className="produit-prix">{produit.price} €</span>
                             {/* <span className="produit-quantity">{produit.quantity}</span> */}
