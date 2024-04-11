@@ -30,38 +30,41 @@ exports.authenticator = (req, res, next) => {
 };
 
 
+const jwt = require('jsonwebtoken');
+
 exports.isadmin = async (req, res, next) => {
     const token = req.query.token || req.headers.authorization;
     console.log('Token:', token);
-    if (!token) {
-        console.log('Unauthorized');
-        return res.status(401).json({ error: 'Unauthorized' });
-    }
 
-    const email = getemailFromtoken(token);
-    if (!email) {
-        console.log('Unauthorized');
-        return res.status(401).json({ error: 'Unauthorized' });
+    if (!token) {
+        console.log('Unauthorized: No token provided');
+        return res.status(401).json({ error: 'Unauthorized: No token provided' });
     }
 
     try {
+        // Vérifiez et décodez le jeton JWT
+        const decoded = jwt.verify(token, 'votre_secret_jwt');
+
+        // Récupérez l'email à partir du décodage du jeton
+        const email = decoded.email;
+
         const conn = await db.getConnection();
         const [result] = await conn.query('SELECT admin FROM users WHERE email = ?', [email]);
         conn.release();
 
         if (result.length === 0) {
-            console.log('Unauthorized');
-            return res.status(401).json({ error: 'Unauthorized' });
+            console.log('Unauthorized: User not found');
+            return res.status(401).json({ error: 'Unauthorized: User not found' });
         }
 
         if (result[0].admin === 1) {
             next();
         } else {
-            console.log('Unauthorized');
-            return res.status(401).json({ error: 'Unauthorized' });
+            console.log('Unauthorized: User is not an admin');
+            return res.status(401).json({ error: 'Unauthorized: User is not an admin' });
         }
     } catch (error) {
         console.error('Error in isadmin middleware:', error);
-        return res.status(500).json({ error: 'Internal Server Error' });
+        return res.status(401).json({ error: 'Unauthorized: Invalid token' });
     }
 };
