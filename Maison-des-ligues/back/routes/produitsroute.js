@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 
-app.post('/produit', upload.single('image'), produitscontroller.ajoutproduit, isadmin);
+app.post('/produit', upload.single('image'), isadmin, produitscontroller.ajoutproduit);
 app.get('/produit', produitscontroller.afficheproduit);
 app.delete('/produit/:pid', produitscontroller.supprimerproduit);
 
