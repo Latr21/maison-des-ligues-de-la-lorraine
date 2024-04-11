@@ -43,7 +43,7 @@ exports.isadmin = async (req, res, next) => {
 
     try {
         // Vérifiez et décodez le jeton JWT
-        const decoded = jwt.verify(token, 'votre_secret_jwt');
+        const decoded = jwt.verify(token, 'mdpapimdp');
 
         // Récupérez l'email à partir du décodage du jeton
         const email = decoded.email;
