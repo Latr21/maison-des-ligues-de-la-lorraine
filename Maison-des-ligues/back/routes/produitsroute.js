@@ -5,6 +5,7 @@ const produitscontroller = require('../controllers/produitscontroller');
 const usercontroller = require('../controllers/userscontroller');
 
 const path = require('path');
+const { isadmin } = require('../midleware/middleware');
 app.use('/uploads', express.static('uploads'));
 
 const storage = multer.diskStorage({
@@ -20,7 +21,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 
-app.post('/produit', upload.single('image'), produitscontroller.ajoutproduit);
+app.post('/produit', upload.single('image'), produitscontroller.ajoutproduit, isadmin);
 app.get('/produit', produitscontroller.afficheproduit);
 app.delete('/produit/:pid', produitscontroller.supprimerproduit);
 
