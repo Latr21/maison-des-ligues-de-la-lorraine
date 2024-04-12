@@ -7,6 +7,12 @@ exports.ajoutproduit = async (req, res) => {
     const image = req.file ? req.file.path : null;
 
     try {
+        // Vérifier si l'utilisateur est administrateur
+        if (!req.user.isAdmin) {
+            console.log('Seuls les administrateurs sont autorisés à ajouter des produits.');
+            return res.status(403).json({ error: 'Seuls les administrateurs sont autorisés à ajouter des produits.' });
+        }
+
         console.log('Data received for adding a product:');
         console.log('Name:', req.body.name);
         console.log('details:', req.body.details);
@@ -51,7 +57,6 @@ exports.ajoutproduit = async (req, res) => {
         res.status(500).json({ error: 'Une erreur s\'est produite' });
     }
 };
-
 exports.afficheproduit = async (req, res) => {
     try {
         const [result] = await db.query('SELECT * FROM products');

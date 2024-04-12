@@ -11,9 +11,10 @@ const getemailFromtoken = (token) => {
         return null;
     }
 }
+
 exports.authenticator = (req, res, next) => {
-    const token = req.query.token ? req.query.token : req.headers.authorization;
-    console.log('Token:', token);
+    const token = req.headers.authorization || req.query.token;
+    console.log('Token in authenticator:', token);
     if (token && process.env.API_KEY) {
         jwt.verify(token, process.env.API_KEY, (err, decoded) => {
             if (err) {
@@ -28,43 +29,24 @@ exports.authenticator = (req, res, next) => {
         return res.status(401).json({ error: 'No token provided' });
     }
 };
-
-
-const jwt = require('jsonwebtoken');
-
-exports.isadmin = async (req, res, next) => {
-    const token = req.query.token || req.headers.authorization;
-    console.log('Token:', token);
-
-    if (!token) {
-        console.log('Unauthorized: No token provided');
-        return res.status(401).json({ error: 'Unauthorized: No token provided' });
-    }
-
-    try {
-        // Vérifiez et décodez le jeton JWT
-        const decoded = jwt.verify(token, 'mdpapimdp');
-
-        // Récupérez l'email à partir du décodage du jeton
-        const email = decoded.email;
-
-        const conn = await db.getConnection();
-        const [result] = await conn.query('SELECT admin FROM users WHERE email = ?', [email]);
-        conn.release();
-
-        if (result.length === 0) {
-            console.log('Unauthorized: User not found');
-            return res.status(401).json({ error: 'Unauthorized: User not found' });
-        }
-
-        if (result[0].admin === 1) {
-            next();
-        } else {
-            console.log('Unauthorized: User is not an admin');
-            return res.status(401).json({ error: 'Unauthorized: User is not an admin' });
-        }
-    } catch (error) {
-        console.error('Error in isadmin middleware:', error);
-        return res.status(401).json({ error: 'Unauthorized: Invalid token' });
+exports.isadmin = (req, res, next) => {
+    const token = req.headers.authorization || req.query.token;
+    console.log('Token dans le middleware isadmin:', token);
+    if (token && process.env.API_KEY) {
+        jwt.verify(token, process.env.API_KEY, (err, decoded) => {
+            if (err) {
+                console.error('Erreur dans le middleware isadmin:', err);
+                return res.status(401).json({ error: 'Token invalide' });
+            } else {
+                const { email, isAdmin } = decoded;
+                console.log('Email extrait du token:', email);
+                console.log('Statut d\'administrateur extrait du token:', isAdmin);
+                req.user = { email, isAdmin }; // Ajout de l'objet user à la requête pour une utilisation ultérieure
+                next();
+            }
+        });
+    } else {
+        console.log('Aucun token fourni');
+        return res.status(401).json({ error: 'Aucun token fourni' });
     }
 };

@@ -3,6 +3,7 @@ const multer = require('multer');
 const app = express();
 const produitscontroller = require('../controllers/produitscontroller');
 const usercontroller = require('../controllers/userscontroller');
+const { authenticator } = require('../midleware/middleware');
 
 const path = require('path');
 const { isadmin } = require('../midleware/middleware');
@@ -21,9 +22,9 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 
-app.post('/produit', upload.single('image'), isadmin, produitscontroller.ajoutproduit);
+app.post('/produit', upload.single('image'), authenticator, isadmin, produitscontroller.ajoutproduit);
 app.get('/produit', produitscontroller.afficheproduit);
-app.delete('/produit/:pid', produitscontroller.supprimerproduit);
+app.delete('/produit/:pid', authenticator, isadmin, produitscontroller.supprimerproduit);
 
 // Route POST pour l'ajout d'un produit au panier
 app.post('/ajout', (req, res) => {
