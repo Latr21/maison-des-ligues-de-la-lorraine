@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../../styles/Admin/Produits.css';
+import Cookies from 'js-cookie';
 
 const Produits = () => {
     const [name, setName] = useState('');
@@ -10,8 +11,35 @@ const Produits = () => {
     const [products, setProducts] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [error, setError] = useState(null);
+    const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
+        const token = Cookies.get('token');
+
+        const checkAdminStatus = async () => {
+            try {
+                const response = await fetch('/api/user/isadmin', {
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setIsAdmin(data.isAdmin);
+                } else {
+                    console.error('Erreur lors de la récupération du statut d\'administrateur :', response.statusText);
+                }
+            } catch (error) {
+                console.error('Erreur lors de la récupération du statut d\'administrateur :', error);
+            }
+        };
+
+        if (token) {
+            checkAdminStatus();
+        }
+
         fetch("http://192.168.1.37:3000/api/produitsroute/produit")
             .then((response) => response.json())
             .then((data) => setProducts(data))
@@ -132,32 +160,33 @@ const Produits = () => {
     return (
         <section className="add-products">
             <h1>Ajouter/Modifier un produit</h1>
-
-            <form onSubmit={(e) => e.preventDefault()}>
-                <div className="flex">
-                    <div className="inputBox">
-                        <span>Nom du produit </span>
-                        <input type="text" className="box" required maxLength="100" placeholder="Entrer le nom du produit" name="name" value={name} onChange={handleChange} />
+            {isAdmin && (
+                <form onSubmit={(e) => e.preventDefault()}>
+                    <div className="flex">
+                        <div className="inputBox">
+                            <span>Nom du produit </span>
+                            <input type="text" className="box" required maxLength="100" placeholder="Entrer le nom du produit" name="name" value={name} onChange={handleChange} />
+                        </div>
+                        <div className="inputBox">
+                            <span>Prix du produit </span>
+                            <input type="number" className="box" required max="9999999" placeholder="Entrer le prix du produit" name="price" value={price} onChange={handleChange} />
+                        </div>
+                        <div className="inputBox">
+                            <span>Quantité du produit </span>
+                            <input type="number" className="box" required min="1" placeholder="Entrer la quantité du produit" name="quantity" value={quantity} onChange={handleChange} />
+                        </div>
+                        <div className="inputBox">
+                            <span>Image du produit </span>
+                            <input type="file" name="image" accept="image/jpg, image/jpeg, image/png, image/webp" className="box" onChange={handleChange} required />
+                        </div>
+                        <div className="inputBox">
+                            <span>Description du produit </span>
+                            <textarea name="details" placeholder="Entrer la description du produit" className="box" required maxLength="500" cols="30" rows="10" value={details} onChange={handleChange} />
+                        </div>
+                        <button type="button" onClick={selectedProduct ? handleUpdateProduct : handleAddProduct}>{selectedProduct ? "Modifier le produit" : "Ajouter le produit"}</button>
                     </div>
-                    <div className="inputBox">
-                        <span>Prix du produit </span>
-                        <input type="number" className="box" required max="9999999" placeholder="Entrer le prix du produit" name="price" value={price} onChange={handleChange} />
-                    </div>
-                    <div className="inputBox">
-                        <span>Quantité du produit </span>
-                        <input type="number" className="box" required min="1" placeholder="Entrer la quantité du produit" name="quantity" value={quantity} onChange={handleChange} />
-                    </div>
-                    <div className="inputBox">
-                        <span>Image du produit </span>
-                        <input type="file" name="image" accept="image/jpg, image/jpeg, image/png, image/webp" className="box" onChange={handleChange} required />
-                    </div>
-                    <div className="inputBox">
-                        <span>Description du produit </span>
-                        <textarea name="details" placeholder="Entrer la description du produit" className="box" required maxLength="500" cols="30" rows="10" value={details} onChange={handleChange} />
-                    </div>
-                    <button type="button" onClick={selectedProduct ? handleUpdateProduct : handleAddProduct}>{selectedProduct ? "Modifier le produit" : "Ajouter le produit"}</button>
-                </div>
-            </form>
+                </form>
+            )}
             <h1>Liste des Produits :</h1>
             <div className='liste'>
                 {products.map(product => (
