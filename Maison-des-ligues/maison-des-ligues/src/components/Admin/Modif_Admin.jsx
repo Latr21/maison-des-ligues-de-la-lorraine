@@ -4,22 +4,33 @@ import bcrypt from 'bcryptjs';
 
 const Modif_Admin = () => {
     const [administrateurs, setAdministrateurs] = useState([]);
-    const [newName, setNewName] = useState('');
-    const [newEmail, setNewEmail] = useState('');
-    const [newPassword, setNewPassword] = useState('');
+    const [modificationData, setModificationData] = useState({
+        newName: '',
+        newEmail: '',
+        newPassword: ''
+    });
 
     useEffect(() => {
-        fetch("http://192.168.1.37:3000/api/usersroute/administrateurs")
-            .then((response) => response.json())
-            .then((data) => setAdministrateurs(data))
-            .catch((error) => console.error(error));
+        fetchAdmins();
     }, []);
+
+    const fetchAdmins = async () => {
+        try {
+            const response = await fetch("http://192.168.1.37:3000/api/usersroute/administrateurs");
+            if (response.ok) {
+                const data = await response.json();
+                setAdministrateurs(data);
+            } else {
+                console.error('Erreur lors de la récupération des administrateurs:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Erreur lors de la récupération des administrateurs:', error);
+        }
+    };
 
     const handleModification = async (uid) => {
         try {
-            // Cryptez le nouveau mot de passe avec bcryptjs
-            const hashedPassword = await bcrypt.hash(newPassword, 10);
-
+            const hashedPassword = await bcrypt.hash(modificationData.newPassword, 10);
             const response = await fetch('http://192.168.1.37:3000/api/usersroute/modifieradmin', {
                 method: 'POST',
                 headers: {
@@ -27,27 +38,21 @@ const Modif_Admin = () => {
                 },
                 body: JSON.stringify({
                     uid,
-                    newName,
-                    newEmail,
-                    newPassword: hashedPassword,  // Envoyez le mot de passe crypté
+                    ...modificationData,
+                    newPassword: hashedPassword
                 }),
             });
 
             if (response.ok) {
-                const data = await response.json();
-                console.log(data);
-                // Mettez à jour la liste des administrateurs après la modification réussie
-                setAdministrateurs((admins) =>
-                    admins.map((admin) =>
-                        admin.uid === uid
-                            ? { ...admin, name: newName, email: newEmail }
-                            : admin
-                    )
+                const updatedAdmins = administrateurs.map(admin =>
+                    admin.uid === uid ? { ...admin, ...modificationData } : admin
                 );
-                // Réinitialisez les champs de saisie après la modification réussie
-                setNewName('');
-                setNewEmail('');
-                setNewPassword('');
+                setAdministrateurs(updatedAdmins);
+                setModificationData({
+                    newName: '',
+                    newEmail: '',
+                    newPassword: ''
+                });
             } else {
                 console.error('Erreur lors de la modification de l\'administrateur :', response.statusText);
             }
@@ -59,37 +64,31 @@ const Modif_Admin = () => {
     return (
         <section className="modify-admins">
             <h1>Modification des administrateurs</h1>
-
             <div>
-                {administrateurs.map((admin) => (
+                {administrateurs.map(admin => (
                     <div key={admin.uid} className="admin-box">
                         <h2>{admin.name}</h2>
                         <p>Email: {admin.email}</p>
                         <div>
                             <input
-                                name='name'
                                 type="text"
                                 placeholder="Nouveau Nom"
-                                // value={newName}
-                                onChange={(e) => setNewName(e.target.value)}
+                                value={modificationData.newName}
+                                onChange={(e) => setModificationData({ ...modificationData, newName: e.target.value })}
                             />
                             <input
-                                name='email'
                                 type="text"
                                 placeholder="Nouvel Email"
-                                // value={newEmail}
-                                onChange={(e) => setNewEmail(e.target.value)}
+                                value={modificationData.newEmail}
+                                onChange={(e) => setModificationData({ ...modificationData, newEmail: e.target.value })}
                             />
                             <input
-                                name='password'
                                 type="password"
                                 placeholder="Nouveau Mot de Passe"
-                                // value={newPassword}
-                                onChange={(e) => setNewPassword(e.target.value)}
+                                value={modificationData.newPassword}
+                                onChange={(e) => setModificationData({ ...modificationData, newPassword: e.target.value })}
                             />
-                            <button onClick={() => handleModification(admin.uid)}>
-                                Modifier
-                            </button>
+                            <button onClick={() => handleModification(admin.uid)}>Modifier</button>
                         </div>
                     </div>
                 ))}

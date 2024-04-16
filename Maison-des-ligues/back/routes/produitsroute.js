@@ -38,12 +38,12 @@ app.post('/ajout', (req, res) => {
     console.log('Image:', image);
 
     // Appeler le contrôleur pour gérer l'ajout du produit au panier
-    produitscontroller.ajouterAuPanier(req, res);
+    isadmin, produitscontroller.ajouterAuPanier(req, res);
 });
 
 // Endpoint pour récupérer le contenu du panier
 app.get('/panier', produitscontroller.getContenuPanier);
 app.put('/produit/:pid', upload.single('image'), produitscontroller.updateProduct);
 app.get('/PrixTotalPanier', produitscontroller.getPrixTotalPanier);
-
+app.delete('/suprimerpanier', produitscontroller.supprimerDuPanier);
 module.exports = app;
