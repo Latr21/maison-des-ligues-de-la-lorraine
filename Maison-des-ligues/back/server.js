@@ -23,7 +23,7 @@ app.use(express.json());
 // Activation du support CORS pour permettre les requêtes depuis un domaine différent
 // Activation du support CORS pour permettre les requêtes depuis plusieurs domaines différents
 app.use(cors({
-    origin: ['http://localhost:3001',], // Inclure les deux origines
+    origin: ['http://192.168.1.17:3000',], // Inclure les deux origines
     credentials: true,
 }));
 
