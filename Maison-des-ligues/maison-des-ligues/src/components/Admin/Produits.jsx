@@ -50,6 +50,10 @@ const Produits = () => {
         try {
             const response = await fetch('http://192.168.1.37:3000/api/produitsroute/produit', {
                 method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: formDataToSend,
             });
 
