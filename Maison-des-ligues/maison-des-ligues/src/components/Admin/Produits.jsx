@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../../styles/Admin/Produits.css';
 import { jwtDecode } from 'jwt-decode';
-
+import Cookies from 'js-cookie';
 const Produits = () => {
     const [name, setName] = useState('');
     const [details, setDetails] = useState('');
