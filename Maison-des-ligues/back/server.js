@@ -23,10 +23,9 @@ app.use(express.json());
 // Activation du support CORS pour permettre les requêtes depuis un domaine différent
 // Activation du support CORS pour permettre les requêtes depuis plusieurs domaines différents
 app.use(cors({
-    origin: ['http://192.168.1.17:3001'], // Inclure les deux origines
-    credentials: true,
+    origin: 'http://192.168.1.17:3000',
+    credentials: true // Si vous avez besoin d'envoyer des cookies avec les requêtes
 }));
-
 
 // Middleware pour servir les fichiers statiques
 app.use('/uploads', express.static('uploads'));
