@@ -10,7 +10,7 @@ const path = require('path');
 const produitsroute = require('./routes/produitsroute');
 const usersroute = require('./routes/usersroute');
 const cookieParser = require('cookie-parser');
-
+const bodyParser = require('body-parser');
 // Assurez-vous que crypto.webcrypto est disponible pour webcrypto pour le fonctionnement de crypto-browserify
 require('crypto').webcrypto = require('crypto-browserify');
 
@@ -19,6 +19,7 @@ app.use(cookieParser());
 
 // Utilisation de JSON middleware pour traiter les requêtes au format JSON
 app.use(express.json());
+app.use(bodyParser.json({ limit: '1mb' }));
 
 // Activation du support CORS pour permettre les requêtes depuis un domaine différent
 // Activation du support CORS pour permettre les requêtes depuis plusieurs domaines différents
