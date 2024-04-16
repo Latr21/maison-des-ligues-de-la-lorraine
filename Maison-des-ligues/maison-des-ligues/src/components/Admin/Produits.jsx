@@ -18,7 +18,7 @@ const Produits = () => {
 
         const checkAdminStatus = async () => {
             try {
-                const response = await fetch('/api/user/isadmin', {
+                const response = await fetch('http://192.168.1.37:3000/api/usersroute/isadmin', {
                     method: 'GET',
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -61,35 +61,21 @@ const Produits = () => {
     };
 
     const handleAddProduct = async () => {
-        const formDataToSend = new FormData();
-        formDataToSend.append('name', name);
-        formDataToSend.append('details', details);
-        formDataToSend.append('price', price);
-        formDataToSend.append('image', image);
-        formDataToSend.append('quantity', quantity);
-
         try {
+            const token = localStorage.getItem('token');
             const response = await fetch('http://192.168.1.37:3000/api/produitsroute/produit', {
                 method: 'POST',
-                body: formDataToSend,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` // Ajoutez le token JWT aux en-têtes de la requête
+                },
+                body: JSON.stringify(formDataToSend),
             });
 
-            if (response.ok) {
-                const newProduct = await response.json();
-                setProducts([...products, newProduct]);
-
-                setName('');
-                setDetails('');
-                setPrice('');
-                setImage(null);
-                setQuantity('');
-            } else {
-                console.error('Erreur lors de l\'ajout du produit :', response.statusText);
-                setError('Erreur lors de l\'ajout du produit.');
-            }
+            // Gestion de la réponse
         } catch (error) {
-            console.error('Erreur lors de la soumission du formulaire :', error);
-            setError('Une erreur s\'est produite lors de la soumission du formulaire.');
+            console.error('Erreur lors de l\'ajout du produit :', error);
+            setError('Erreur lors de l\'ajout du produit.');
         }
     };
 

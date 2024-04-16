@@ -18,5 +18,5 @@ router.post('/modifieradmin', authenticator, isadmin, usercontroller.modifieradm
 router.delete('/utilisateurs/:uid', usercontroller.delete);
 router.post('/deconnexion', usercontroller.deconnexion);
 router.post('/connexionadmin', usercontroller.connexionAdmin);
-
+app.use('isadmin');
 module.exports = router;
