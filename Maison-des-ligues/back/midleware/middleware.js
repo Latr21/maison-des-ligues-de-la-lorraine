@@ -10,7 +10,7 @@ const getemailFromtoken = (token) => {
         console.error('Error in getemailFromtoken:', error);
         return null;
     }
-}
+}//a
 
 exports.authenticator = (req, res, next) => {
     const token = req.headers.authorization || req.query.token;

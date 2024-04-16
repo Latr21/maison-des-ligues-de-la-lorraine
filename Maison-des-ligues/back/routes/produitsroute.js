@@ -20,7 +20,7 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
-
+//a
 
 app.post('/produit', upload.single('image'), authenticator, isadmin, produitscontroller.ajoutproduit);
 app.get('/produit', produitscontroller.afficheproduit);
