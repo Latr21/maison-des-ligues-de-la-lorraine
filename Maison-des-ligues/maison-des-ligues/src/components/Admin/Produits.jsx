@@ -21,7 +21,7 @@ const Produits = () => {
             setIsAdmin(decodedToken.isAdmin);
             setToken(tokenFromCookie); // Définition de la valeur de token
         }
-        fetch("http://192.168.1.37:3000/api/produitsroute/produit")
+        fetch("http://localhost:3000/api/produitsroute/produit")
             .then((response) => response.json())
             .then((data) => setProducts(data))
             .catch((error) => console.error(error));
@@ -51,10 +51,10 @@ const Produits = () => {
         formDataToSend.append('quantity', quantity);
 
         try {
-            const response = await fetch('http://192.168.1.37:3000/api/produitsroute/produit', {
+            console.log(error);
+            const response = await fetch('http://localhost:3000/api/produitsroute/produit', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
                 body: formDataToSend,
@@ -88,7 +88,7 @@ const Produits = () => {
         formDataToSend.append('quantity', quantity);
 
         try {
-            const response = await fetch(`http://192.168.1.37:3000/api/produitsroute/produit/${selectedProduct.pid}`, {
+            const response = await fetch(`http://localhost:3000/api/produitsroute/produit/${selectedProduct.pid}`, {
                 method: 'PUT',
                 body: formDataToSend,
             });
@@ -118,8 +118,11 @@ const Produits = () => {
 
     const handleDeleteProduct = async (pid) => {
         try {
-            const response = await fetch(`http://192.168.1.37:3000/api/produitsroute/produit/${pid}`, {
+            const response = await fetch(`http://localhost:3000/api/produitsroute/produit/${pid}`, {
                 method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
             });
 
             if (response.ok) {
@@ -177,7 +180,7 @@ const Produits = () => {
             <div className='liste'>
                 {products.map(product => (
                     <div key={product.pid} className="box-product">
-                        {product.image && <img src={`http://192.168.1.37:3000/${product.image}`} alt={product.name} style={{ maxWidth: '100%' }} />}
+                        {product.image && <img src={`http://localhost:3000/${product.image}`} alt={product.name} style={{ maxWidth: '100%' }} />}
                         <div className="details">
                             <p>{product.name}</p>
                             <p>{product.details}</p>

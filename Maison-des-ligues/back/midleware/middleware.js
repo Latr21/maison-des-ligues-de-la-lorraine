@@ -10,7 +10,7 @@ const getemailFromtoken = (token) => {
         console.error('Error in getemailFromtoken:', error);
         return null;
     }
-}//a
+}
 
 exports.authenticator = (req, res, next) => {
     const token = req.headers.authorization || req.query.token;
@@ -29,11 +29,12 @@ exports.authenticator = (req, res, next) => {
         return res.status(401).json({ error: 'No token provided' });
     }
 };
+
 exports.isadmin = (req, res, next) => {
     const token = req.headers.authorization || req.query.token;
     console.log('Token dans le middleware isadmin:', token);
     if (token && process.env.API_KEY) {
-        jwt.verify(token, process.env.API_KEY, (err, decoded) => {
+        jwt.verify(token.split(" ")[1], process.env.API_KEY, (err, decoded) => {
             if (err) {
                 console.error('Erreur dans le middleware isadmin:', err);
                 return res.status(401).json({ error: 'Token invalide' });

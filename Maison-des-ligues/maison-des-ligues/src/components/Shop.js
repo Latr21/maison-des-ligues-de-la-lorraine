@@ -10,7 +10,7 @@ function Shop() {
 
     useEffect(() => {
         console.log("Fetching products...");
-        axios.get('http://192.168.1.37:3000/api/produitsroute/produit')
+        axios.get('http://localhost:3000/api/produitsroute/produit')
             .then(response => {
                 console.log("Products fetched successfully:", response.data);
                 setProducts(response.data);
@@ -42,7 +42,7 @@ function Shop() {
                 quantity: quantity // Utilisation de la quantité correcte
             };
 
-            const response = await fetch('http://192.168.1.37:3000/api/produitsroute/ajout', {
+            const response = await fetch('http://localhost:3000/api/produitsroute/ajout', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -75,7 +75,7 @@ function Shop() {
             <div className='liste'>
                 {products.map(product => (
                     <div key={product.pid} className="box-product">
-                        {product.image && <img src={`http://192.168.1.37:3000/${product.image}`} alt={product.name} style={{ maxWidth: '50%' }} />}
+                        {product.image && <img src={`http://localhost:3000/${product.image}`} alt={product.name} style={{ maxWidth: '50%' }} />}
                         <div className='details'>
                             <h2>{product.name}</h2>
                             <p>{product.details}</p>

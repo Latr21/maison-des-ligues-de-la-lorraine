@@ -6,7 +6,7 @@ function Commandes() {
     useEffect(() => {
         const fetchTotalPrice = async () => {
             try {
-                const response = await fetch("http://192.168.1.37:3000/api/produitsroute/PrixTotalPanier");
+                const response = await fetch("http://localhost:3000/api/produitsroute/PrixTotalPanier");
                 if (response.ok) {
 
                     const data = await response.json();

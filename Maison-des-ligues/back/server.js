@@ -1,4 +1,3 @@
-// Importation des modules nécessaires
 const express = require('express');
 const app = express();
 const cors = require('cors');
@@ -18,16 +17,16 @@ require('crypto').webcrypto = require('crypto-browserify');
 app.use(cookieParser());
 
 // Utilisation de JSON middleware pour traiter les requêtes au format JSON
-app.use(express.json());
 app.use(bodyParser.json({ limit: '1mb' }));
-
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 // Activation du support CORS pour permettre les requêtes depuis un domaine différent
 // Activation du support CORS pour permettre les requêtes depuis plusieurs domaines différents
 app.use(cors({
-    origin: ['http://192.168.1.17:3001'], // Inclure les deux origines
+    origin: ['http://localhost:3001'], // Inclure les deux origines
     credentials: true,
 }));
-
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
 // Middleware pour servir les fichiers statiques
 app.use('/uploads', express.static('uploads'));

@@ -10,7 +10,14 @@ function Utilisateurs() {
 
     const fetchUsers = async () => {
         try {
-            const response = await fetch("http://192.168.1.37:3000/api/usersroute/utilisateurs");
+            const token = Cookies.get('token');
+
+            const response = await fetch("http://localhost:3000/api/usersroute/utilisateurs", {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
             if (!response.ok) {
                 throw new Error("Erreur lors de la récupération des utilisateurs");
             }
@@ -23,18 +30,17 @@ function Utilisateurs() {
 
     const handleDelete = async (uid) => {
         try {
-            const token = Cookies.get('token'); // Récupérez le token JWT depuis le cookie
+            const token = Cookies.get('token');
 
-            const response = await fetch(`http://192.168.1.37:3000/api/usersroute/utilisateurs/${uid}`, {
+            const response = await fetch(`http://localhost:3000/api/usersroute/utilisateurs/${uid}`, {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': `Bearer ${token}`, // Inclure le token JWT dans l'en-tête Authorization
-                    'Content-Type': 'application/json', // Spécifier le type de contenu
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
                 },
             });
 
             if (response.ok) {
-                // Mettez à jour l'état des utilisateurs localement
                 setUsers(users.filter(user => user.uid !== uid));
             } else {
                 console.error('Erreur lors de la suppression de l\'utilisateur :', response.statusText);
@@ -43,6 +49,7 @@ function Utilisateurs() {
             console.error('Erreur lors de la suppression de l\'utilisateur :', error);
         }
     };
+
     return (
         <div>
             <h1>Liste des utilisateurs</h1>

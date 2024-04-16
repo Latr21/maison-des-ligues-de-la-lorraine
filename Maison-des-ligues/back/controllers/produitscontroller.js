@@ -4,7 +4,7 @@ const crypto = require('crypto');
 exports.ajoutproduit = async (req, res) => {
     // Vérifier si l'utilisateur est un administrateur
     if (!req.user || !req.user.isAdmin) {
-        console.log(req.user)
+        console
         return res.status(403).json({ error: 'Seuls les administrateurs sont autorisés à ajouter des produits.' });
     }
 
@@ -179,9 +179,6 @@ exports.getPrixTotalPanier = async (req, res) => {
         res.status(500).json({ error: 'Une erreur s\'est produite lors de la récupération du nombre total de prix dans le panier' });
     }
 };
-
-
-
 exports.supprimerDuPanier = async (req, res) => {
     const { pid, uid } = req.body;
     await db.execute('DELETE FROM panier WHERE pid = ? AND uid = ?', [pid, uid]);

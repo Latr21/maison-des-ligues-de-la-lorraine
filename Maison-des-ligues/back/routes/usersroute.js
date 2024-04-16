@@ -12,10 +12,10 @@ const router = express.Router();
 
 router.post('/connexion', usercontroller.connexion);
 router.post('/inscription', usercontroller.inscription);
-router.get('/utilisateurs', usercontroller.utilisateurs);
-router.get('/administrateurs', authenticator, isadmin, usercontroller.administrateurs);
-router.post('/modifieradmin', authenticator, isadmin, usercontroller.modifieradmin);
-router.delete('/utilisateurs/:uid', usercontroller.delete);
+router.get('/utilisateurs', isadmin, usercontroller.utilisateurs);
+router.get('/administrateurs', isadmin, usercontroller.administrateurs);
+router.post('/modifieradmin', isadmin, usercontroller.modifieradmin);
+router.delete('/utilisateurs/:uid', isadmin, usercontroller.delete);
 router.post('/deconnexion', usercontroller.deconnexion);
 router.post('/connexionadmin', usercontroller.connexionAdmin);
 router.use(isadmin);

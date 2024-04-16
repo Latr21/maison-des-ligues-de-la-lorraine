@@ -25,7 +25,7 @@ const MyComponent = () => {
   const handleLogout = async () => {
     try {
       // Effectuer une requête vers le point de terminaison de déconnexion de votre serveur
-      const response = await fetch('http://192.168.1.37:3000/api/usersroute/deconnexion', {
+      const response = await fetch('http://localhost:3000/api/usersroute/deconnexion', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

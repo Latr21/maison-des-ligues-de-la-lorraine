@@ -46,5 +46,5 @@ app.post('/ajout', (req, res) => {
 app.get('/panier', produitscontroller.getContenuPanier);
 app.put('/produit/:pid', upload.single('image'), produitscontroller.updateProduct);
 app.get('/PrixTotalPanier', produitscontroller.getPrixTotalPanier);
-
+app.delete('/suprimerpanier', produitscontroller.supprimerDuPanier);
 module.exports = app;
