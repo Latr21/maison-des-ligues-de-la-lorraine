@@ -2,61 +2,36 @@ const { db } = require('../Database/database');
 const crypto = require('crypto');
 
 exports.ajoutproduit = async (req, res) => {
-    const { name, details, price, quantity } = req.body; // Ajout de la quantité dans les données extraites du corps de la requête
+    // Vérifier si l'utilisateur est un administrateur
+    if (!req.user || !req.user.isAdmin) {
+        console.log(req.user)
+        return res.status(403).json({ error: 'Seuls les administrateurs sont autorisés à ajouter des produits.' });
+    }
+
+    const { name, details, price, quantity } = req.body;
     const pid = crypto.randomUUID();
     const image = req.file ? req.file.path : null;
 
     try {
-        // Vérifier si l'utilisateur est administrateur
-        if (!req.user.isAdmin) {
-            console.log('Seuls les administrateurs sont autorisés à ajouter des produits.');
-            return res.status(403).json({ error: 'Seuls les administrateurs sont autorisés à ajouter des produits.' });
-        }
-
-        console.log('Data received for adding a product:');
-        console.log('Name:', req.body.name);
-        console.log('details:', req.body.details);
-        console.log('Price:', req.body.price);
-        console.log('Quantity:', req.body.quantity);
-        console.log('Image:', req.file); // Si vous avez utilisé multer pour gérer les fichiers
-
         // Vérifier que toutes les valeurs nécessaires sont définies
-        if (!name) {
-            console.log('Le champ "Name" est manquant.');
-            return res.status(400).json({ error: 'Le champ "Name" est manquant.' });
-        }
-        if (!details) {
-            console.log('Le champ "Description" est manquant.');
-            return res.status(400).json({ error: 'Le champ "Description" est manquant.' });
-        }
-        if (!price) {
-            console.log('Le champ "Price" est manquant.');
-            return res.status(400).json({ error: 'Le champ "Price" est manquant.' });
-        }
-        if (!quantity) {
-            console.log('Le champ "Quantity" est manquant.');
-            return res.status(400).json({ error: 'Le champ "Quantity" est manquant.' });
-        }
-        if (!image) {
-            console.log('L\'image est manquante.');
-            return res.status(400).json({ error: 'L\'image est manquante.' });
-        }
-        // Vérifier que l'image est téléchargée avec succès
-        if (!req.file) {
-            return res.status(400).json({ error: 'L\'image du produit est requise' });
+        if (!name || !details || !price || !quantity || !image) {
+            return res.status(400).json({ error: 'Toutes les informations du produit sont requises.' });
         }
 
+        // Insérer le produit dans la base de données
         const [result] = await db.execute(
-            'INSERT INTO products (pid, name, details, price, image, quantity) VALUES (?, ?, ?, ?, ?, ?)', // Modification de la requête d'insertion pour inclure la quantité
-            [pid, name, details, price, image, quantity] // Ajout de la quantité dans les valeurs à insérer
+            'INSERT INTO products (pid, name, details, price, image, quantity) VALUES (?, ?, ?, ?, ?, ?)',
+            [pid, name, details, price, image, quantity]
         );
-
-        res.status(200).json({ message: 'Objet ajouté avec succès' });
+        //a
+        return res.status(200).json({ message: 'Produit ajouté avec succès', data: result });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Une erreur s\'est produite' });
+        console.error('Erreur lors de l\'ajout du produit :', error);
+        return res.status(500).json({ error: 'Une erreur s\'est produite lors de l\'ajout du produit.' });
     }
 };
+
+
 exports.afficheproduit = async (req, res) => {
     try {
         const [result] = await db.query('SELECT * FROM products');
@@ -154,7 +129,7 @@ exports.ajouterAuPanier = async (req, res) => {
     }
 };
 
-
+//a
 exports.getContenuPanier = async (req, res) => {
     const { uid } = req.query;
 
@@ -204,3 +179,11 @@ exports.getPrixTotalPanier = async (req, res) => {
         res.status(500).json({ error: 'Une erreur s\'est produite lors de la récupération du nombre total de prix dans le panier' });
     }
 };
+
+
+
+exports.supprimerDuPanier = async (req, res) => {
+    const { pid, uid } = req.body;
+    await db.execute('DELETE FROM panier WHERE pid = ? AND uid = ?', [pid, uid]);
+    res.status(200).json({ message: 'Produit supprimé du panier avec succès' });
+}; 
