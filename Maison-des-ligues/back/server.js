@@ -23,9 +23,10 @@ app.use(express.json());
 // Activation du support CORS pour permettre les requêtes depuis un domaine différent
 // Activation du support CORS pour permettre les requêtes depuis plusieurs domaines différents
 app.use(cors({
-    origin: 'http://192.168.1.17:3000',
-    credentials: true // Si vous avez besoin d'envoyer des cookies avec les requêtes
+    origin: ['http://192.168.1.17:3001'], // Inclure les deux origines
+    credentials: true,
 }));
+
 
 // Middleware pour servir les fichiers statiques
 app.use('/uploads', express.static('uploads'));
@@ -36,6 +37,6 @@ app.use('/api/usersroute', usersroute);
 
 // Démarrage du serveur sur le port 3000
 module.exports =
-    app.listen(3001, () => {
+    app.listen(3000, () => {
 
     });
