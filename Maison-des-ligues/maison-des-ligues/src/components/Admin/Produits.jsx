@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../../styles/Admin/Produits.css';
-import Cookies from 'js-cookie';
+import jwtDecode from 'jwt-decode';
 
 const Produits = () => {
     const [name, setName] = useState('');
@@ -15,31 +15,10 @@ const Produits = () => {
 
     useEffect(() => {
         const token = Cookies.get('token');
-
-        const checkAdminStatus = async () => {
-            try {
-                const response = await fetch('http://192.168.1.37:3000/api/usersroute/isadmin', {
-                    method: 'GET',
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    setIsAdmin(data.isAdmin);
-                } else {
-                    console.error('Erreur lors de la récupération du statut d\'administrateur :', response.statusText);
-                }
-            } catch (error) {
-                console.error('Erreur lors de la récupération du statut d\'administrateur :', error);
-            }
-        };
-
         if (token) {
-            checkAdminStatus();
+            const decodedToken = jwtDecode(token);
+            setIsAdmin(decodedToken.isAdmin);
         }
-
         fetch("http://192.168.1.37:3000/api/produitsroute/produit")
             .then((response) => response.json())
             .then((data) => setProducts(data))
@@ -61,21 +40,35 @@ const Produits = () => {
     };
 
     const handleAddProduct = async () => {
+        const formDataToSend = new FormData();
+        formDataToSend.append('name', name);
+        formDataToSend.append('details', details);
+        formDataToSend.append('price', price);
+        formDataToSend.append('image', image);
+        formDataToSend.append('quantity', quantity);
+
         try {
-            const token = localStorage.getItem('token');
             const response = await fetch('http://192.168.1.37:3000/api/produitsroute/produit', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}` // Ajoutez le token JWT aux en-têtes de la requête
-                },
-                body: JSON.stringify(formDataToSend),
+                body: formDataToSend,
             });
 
-            // Gestion de la réponse
+            if (response.ok) {
+                const newProduct = await response.json();
+                setProducts([...products, newProduct]);
+
+                setName('');
+                setDetails('');
+                setPrice('');
+                setImage(null);
+                setQuantity('');
+            } else {
+                console.error('Erreur lors de l\'ajout du produit :', response.statusText);
+                setError('Erreur lors de l\'ajout du produit.');
+            }
         } catch (error) {
-            console.error('Erreur lors de l\'ajout du produit :', error);
-            setError('Erreur lors de l\'ajout du produit.');
+            console.error('Erreur lors de la soumission du formulaire :', error);
+            setError('Une erreur s\'est produite lors de la soumission du formulaire.');
         }
     };
 
