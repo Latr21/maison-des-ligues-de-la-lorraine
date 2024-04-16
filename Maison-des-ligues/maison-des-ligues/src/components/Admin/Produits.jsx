@@ -12,18 +12,21 @@ const Produits = () => {
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [error, setError] = useState(null);
     const [isAdmin, setIsAdmin] = useState(false);
+    const [token, setToken] = useState(null); // Ajout de la déclaration de token
 
     useEffect(() => {
-        const token = Cookies.get('token');
-        if (token) {
-            const decodedToken = jwtDecode(token);
+        const tokenFromCookie = Cookies.get('token');
+        if (tokenFromCookie) {
+            const decodedToken = jwtDecode(tokenFromCookie);
             setIsAdmin(decodedToken.isAdmin);
+            setToken(tokenFromCookie); // Définition de la valeur de token
         }
         fetch("http://192.168.1.37:3000/api/produitsroute/produit")
             .then((response) => response.json())
             .then((data) => setProducts(data))
             .catch((error) => console.error(error));
     }, []);
+
 
     const handleChange = (e) => {
         if (e.target.name === 'image') {
