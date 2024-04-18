@@ -64,20 +64,23 @@ function Panier() {
 
     return (
         <div className="panier-container">
-            <h1>Contenu du panier :</h1>
-            <ul>
+            <div className="titre-container">
+                <h1>Contenu du panier :</h1>
+            </div>
+            <div className="liste-produits">
                 {panier.map((produit, index) => (
-                    <li key={index} className="produit">
+                    <div key={index} className="produit">
                         <div className="produit-info">
-                            <img src={`http://localhost:3000/${produit.image}`} alt={produit.nom} />
-                            <span className="produit-name">{produit.name}</span>
-                            <span className="produit-price">{produit.price} €</span>
+                            <img src={`http://localhost:3000/${produit.image}`} alt={produit.name} />
+                            <span className="produit-nom">{produit.name}</span>
+                            <span className="produit-prix">{produit.price} €</span>
                             <span className="produit-quantity">{produit.quantity}</span>
                             <button onClick={() => handleDeleteProduct(produit.pid)}>Supprimer</button>
+
                         </div>
-                    </li>
+                    </div>
                 ))}
-            </ul>
+            </div>
             <button onClick={() => alert(`Le montant total est de ${total} €`)}>Confirmer le panier</button>
         </div>
     );

@@ -58,7 +58,7 @@ const MyComponent = () => {
         <div className="bouton-profil">
           {isAuthenticated ? (
             <>
-              <button><Link to="/Profil">Modifier son profil</Link></button>
+              {/* <button><Link to="/Profil">Modifier son profil</Link></button> */}
               <button className="deco" onClick={handleLogout}>Déconnexion</button>
             </>
           ) : (

@@ -1,17 +1,17 @@
-Footer{
+/* Footer{
     background-color: #FFD700;
     position: fixed;
     bottom: 0;
     width: 100%;
-}
+} */
 
-.sitefooter{
+.sitefooter {
     color: red;
     padding: 32px;
     padding-bottom: 5px;
     padding-top: 5px;
 }
 
-li{
+li {
     list-style: none;
 }

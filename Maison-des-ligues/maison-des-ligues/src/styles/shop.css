@@ -13,6 +13,8 @@
   padding: 15px;
   margin-bottom: 20px;
   text-align: center;
+  background-color: rgb(205, 203, 203);
+
 }
 
 .box-product img {
@@ -41,6 +43,8 @@
 
 .details p {
   font-weight: bold;
+  color: black;
+
 }
 
 .details h2 {

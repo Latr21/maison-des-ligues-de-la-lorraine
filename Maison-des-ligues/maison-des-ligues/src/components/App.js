@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Banniere from '../components/Banniere';
 import Acceuil from '../components/Acceuil';
+import Footer from '../components/Footer';
 import Shop from '../components/Shop';
 import Panier from '../components/Panier';
 import Profil from '../components/Profil';
@@ -51,6 +52,7 @@ function App() {
                 <Route path='/profil' element={<Profil />} />
                 <Route path='/connexion' element={<Connexion />} />
                 <Route path='/inscription' element={<Inscription />} />
+                <Route path='/Footer' element={<Footer />} />
 
                 {isAdmin && (
                     <>
