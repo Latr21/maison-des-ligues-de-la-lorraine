@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Cookies from 'js-cookie';
+import '../../styles/Admin/user.css';
 
 function Utilisateurs() {
     const [users, setUsers] = useState([]);
@@ -51,22 +52,24 @@ function Utilisateurs() {
     };
 
     return (
-        <div>
+        <div className="user-container">
             <h1>Liste des utilisateurs</h1>
-            <ul>
-                {users && users.length > 0 ? (
-                    users.map((user) => (
-                        !user.admin && (
-                            <li key={user.uid}>
-                                {user.name} - {user.email}
-                                <button onClick={() => handleDelete(user.uid)}>Supprimer</button>
-                            </li>
-                        )
-                    ))
-                ) : (
-                    <li>Aucun utilisateur trouvé</li>
-                )}
-            </ul>
+            {users && users.length > 0 ? (
+                users.map((user) => (
+                    !user.admin && (
+                        <li key={user.uid} className="user-item">
+                            <div className="user-info">
+                                <span>Nom: </span>{user.name}<br />
+                                <span>Email: </span>{user.email}
+                            </div>
+                            <button className="delete-button" onClick={() => handleDelete(user.uid)}>Supprimer</button>
+                        </li>
+                    )
+                ))
+            ) : (
+                <li>Aucun utilisateur trouvé</li>
+            )}
+
         </div>
     );
 }

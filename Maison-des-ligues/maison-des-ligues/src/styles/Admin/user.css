@@ -1,30 +1,40 @@
-/* Modif_Admin.css */
+/* Utilisateurs.css */
 
-.modify-admins {
+.user-container {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
 }
 
-.admin-box {
+.user-list {
+    list-style: none;
+    padding: 0;
+}
+
+.user-item {
     border: 1px solid #ccc;
     padding: 10px;
     margin-bottom: 10px;
     background-color: rgb(53, 48, 48);
 }
 
-.admin-box h2 {
+.user-info {
     margin-bottom: 5px;
+    color: white;
 }
 
-.admin-box button {
-    background-color: #4caf50;
+.user-info span {
+    font-weight: bold;
+}
+
+.delete-button {
+    background-color: #f44336;
     color: white;
     border: none;
     padding: 5px 10px;
     cursor: pointer;
 }
 
-.admin-box button:hover {
-    background-color: #45a049;
+.delete-button:hover {
+    background-color: #d32f2f;
 }

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import '../../styles/Admin/commande.css'; // Importez le fichier CSS
 
 function Commandes() {
     const [totalPrice, setTotalPrice] = useState(null);
@@ -8,7 +9,6 @@ function Commandes() {
             try {
                 const response = await fetch("http://localhost:3000/api/produitsroute/PrixTotalPanier");
                 if (response.ok) {
-
                     const data = await response.json();
                     setTotalPrice(data.total_count);
                 } else {
@@ -23,11 +23,11 @@ function Commandes() {
     }, []);
 
     return (
-        <div>
+        <div className="commandes-container">
             {totalPrice !== null ? (
-                <p>Prix total du panier : {totalPrice} €</p>
+                <p className="total-price">Prix total du panier : {totalPrice} €</p>
             ) : (
-                <p>aucun produit</p>
+                <p className="error-message">Aucun produit</p>
             )}
         </div>
     );

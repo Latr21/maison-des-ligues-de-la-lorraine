@@ -166,7 +166,7 @@ exports.supprimerproduit = async (req, res) => {
 
 exports.getPrixTotalPanier = async (req, res) => {
     try {
-        const [countRows] = await db.query('SELECT SUM(price) AS total_count FROM panier');
+        const [countRows] = await db.query('SELECT SUM(price * quantity) AS total_count FROM panier;');
         //verif
         if (countRows.length > 0 && countRows[0].total_count !== null) {
             const totalCount = countRows[0].total_count;

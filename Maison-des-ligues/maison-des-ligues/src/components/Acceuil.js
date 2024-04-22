@@ -28,7 +28,7 @@ function Acceuil() {
         }
 
         // Fetch des produits pour le carrousel
-        axios.get('http://localhost:3000/api/produitsroute/produit')
+        axios.get('http://192.168.1.37:3000/api/produitsroute/produit')
             .then(response => {
                 console.log("Products fetched successfully for carousel:", response.data);
                 setProducts(response.data);
@@ -55,7 +55,7 @@ function Acceuil() {
             <Slider {...settings}>
                 {products.map(product => (
                     <div key={product.pid}>
-                        <img src={`http://localhost:3000/${product.image}`} alt={product.name} />
+                        <img src={`http://192.168.1.37:3000/${product.image}`} alt={product.name} />
                         <h3>{product.name}</h3>
                     </div>
                 ))}

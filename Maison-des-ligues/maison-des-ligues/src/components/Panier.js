@@ -30,7 +30,7 @@ function Panier() {
 
             const decodedToken = jwtDecode(token);
 
-            const response = await axios.get('http://localhost:3000/api/produitsroute/panier', {
+            const response = await axios.get('http://192.168.1.37:3000/api/produitsroute/panier', {
                 params: { uid: decodedToken.uid }
             });
             setPanier(response.data);
@@ -43,7 +43,7 @@ function Panier() {
     const handleDeleteProduct = async (pid) => {
         try {
             const token = Cookies.get('token');
-            const response = await axios.delete(`http://localhost:3000/api/produitsroute/suprimerpanier`, {
+            const response = await axios.delete(`http://192.168.1.37:3000/api/produitsroute/suprimerpanier`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 },
@@ -71,7 +71,7 @@ function Panier() {
                 {panier.map((produit, index) => (
                     <div key={index} className="produit">
                         <div className="produit-info">
-                            <img src={`http://localhost:3000/${produit.image}`} alt={produit.name} />
+                            <img src={`http://192.168.1.37:3000/${produit.image}`} alt={produit.name} />
                             <span className="produit-nom">{produit.name}</span>
                             <span className="produit-prix">{produit.price} €</span>
                             <span className="produit-quantity">{produit.quantity}</span>
