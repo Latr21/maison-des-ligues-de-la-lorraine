@@ -18,7 +18,6 @@ h1 {
     font-size: 28px;
     margin-bottom: 10px;
     color: #000000;
-
 }
 
 /* Sous-titre */
@@ -28,40 +27,27 @@ h2 {
     color: #ffffff;
 }
 
-/* Carrousel */
-.slick-slide {
-    display: inline-block;
-    width: 30%;
-    /* Ajustez la largeur en fonction de vos besoins */
-    /* Ajoutez de l'espace horizontal entre chaque produit */
-    margin-top: 5px;
-    /* Ajoutez de l'espace vertical entre chaque produit */
-    vertical-align: top;
-    text-align: left;
+/* Produits */
+.products {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
-.slick-slide img {
+.product {
+    width: 30%;
+    margin: 10px;
+}
+
+.product img {
     width: 100%;
     border-radius: 8px;
 }
 
-.slick-slide h3 {
+.product h3 {
     margin-top: 10px;
     font-size: 16px;
     text-align: center;
-}
-
-/* Si besoin d'ajuster les points du carrousel */
-.slick-dots {
-    bottom: -30px;
-}
-
-.slick-dots li button:before {
-    color: #000;
-}
-
-.slick-dots li.slick-active button:before {
-    color: #fff;
 }
 
 body {

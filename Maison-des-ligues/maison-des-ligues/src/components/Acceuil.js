@@ -2,9 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { jwtDecode } from "jwt-decode"; // Correction ici
 import axios from 'axios';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
 import '../styles/acceuil.css';
 
 function Acceuil() {
@@ -38,32 +35,21 @@ function Acceuil() {
             });
     }, []);
 
-    const settings = {
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 3,
-        slidesToScroll: 1
-    };
-
     return (
-
         <div className="container">
             <h1>Bienvenue {userName || 'invité'} ! sur la Maison des Ligues de Lorraine</h1>
-            <h2>Que vous soyez un athlète aguerri ou un amateur passionné,la maison des  Ligues de la Lorraine est là pour répondre à tous vos besoins en matériel sportif. Préparez-vous à vivre des expériences uniques et à repousser vos limites avec nous !</h2> {/* Texte de bienvenue */}
+            <h2>Que vous soyez un athlète aguerri ou un amateur passionné, la Maison des Ligues de Lorraine est là pour répondre à tous vos besoins en matériel sportif. Préparez-vous à vivre des expériences uniques et à repousser vos limites avec nous !</h2>
             {isAdmin && <p>Vous êtes administrateur.</p>}
-            <Slider {...settings}>
+            <div className="products">
                 {products.map(product => (
-                    <div key={product.pid}>
+                    <div key={product.pid} className="product">
                         <img src={`http://192.168.1.37:3000/${product.image}`} alt={product.name} />
                         <h3>{product.name}</h3>
                     </div>
                 ))}
-            </Slider>
+            </div>
         </div>
     );
 }
 
 export default Acceuil;
-
-
