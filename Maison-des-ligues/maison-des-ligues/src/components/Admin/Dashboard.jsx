@@ -19,13 +19,13 @@ function Dashboard() {
         }
 
         // Obtenez le nombre de produits depuis votre API
-        fetch("http://192.168.1.37:3000/api/produitsroute/produit")
+        fetch("http://localhost:3000/api/produitsroute/produit")
             .then((response) => response.json())
             .then((data) => setProductCount(data.length))
             .catch((error) => console.error(error));
 
         // Obtenez le nombre d'utilisateurs depuis votre API en envoyant le token
-        fetch("http://192.168.1.37:3000/api/usersroute/utilisateurs", {
+        fetch("http://localhost:3000/api/usersroute/utilisateurs", {
             headers: {
                 'Authorization': `Bearer ${tokenFromCookie}`
             }

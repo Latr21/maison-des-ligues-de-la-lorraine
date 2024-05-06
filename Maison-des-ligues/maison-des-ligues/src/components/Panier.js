@@ -30,7 +30,7 @@ function Panier() {
 
             const decodedToken = jwtDecode(token);
 
-            const response = await axios.get('http://192.168.1.37:3000/api/produitsroute/panier', {
+            const response = await axios.get('http://localhost:3000/api/produitsroute/panier', {
                 params: { uid: decodedToken.uid }
             });
             setPanier(response.data);
@@ -40,18 +40,19 @@ function Panier() {
         }
     };
 
-    const handleDeleteProduct = async (pid) => {
+    const handleDeleteProduct = async (pid, quantity) => {
         try {
             const token = Cookies.get('token');
-            const response = await axios.delete(`http://192.168.1.37:3000/api/produitsroute/suprimerpanier`, {
+            const response = await axios.delete(`http://localhost:3000/api/produitsroute/suprimerpanier`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 },
                 data: {
                     pid: pid,
-                    uid: panier[0].uid
+                    uid: panier[0].uid,
+                    quantity: quantity // Envoyer la quantité du produit à supprimer
                 }
-            });                                     //Christian Latour
+            });
             if (response.ok) {
                 setPanier(panier.filter(product => product.pid !== pid));
             } else {
@@ -61,7 +62,6 @@ function Panier() {
             console.error('Erreur lors de la suppression du produit du panier :', error);
         }
     };
-
     return (
         <div className="panier-container">
             <div className="titre-container">
@@ -71,11 +71,11 @@ function Panier() {
                 {panier.map((produit, index) => (
                     <div key={index} className="produit">
                         <div className="produit-info">
-                            <img src={`http://192.168.1.37:3000/${produit.image}`} alt={produit.name} />
+                            <img src={`http://localhost:3000/${produit.image}`} alt={produit.name} />
                             <span className="produit-nom">{produit.name}</span>
                             <span className="produit-prix">{produit.price} €</span>
                             <span className="produit-quantity">{produit.quantity}</span>
-                            <button onClick={() => handleDeleteProduct(produit.pid)}>Supprimer</button>
+                            <button onClick={() => handleDeleteProduct(produit.pid, produit.quantity)}>Supprimer</button>
 
                         </div>
                     </div>

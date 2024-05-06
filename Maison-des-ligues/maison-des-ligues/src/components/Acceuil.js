@@ -25,9 +25,8 @@ function Acceuil() {
         }
 
         // Fetch des produits pour le carrousel
-        axios.get('http://192.168.1.37:3000/api/produitsroute/produit')
+        axios.get('http://localhost:3000/api/produitsroute/produit')
             .then(response => {
-                console.log("Products fetched successfully for carousel:", response.data);
                 setProducts(response.data);
             })
             .catch(error => {
@@ -36,17 +35,22 @@ function Acceuil() {
     }, []);
 
     return (
-        <div className="container">
-            <h1>Bienvenue {userName || 'invité'} ! sur la Maison des Ligues de Lorraine</h1>
-            <h2>Que vous soyez un athlète aguerri ou un amateur passionné, la Maison des Ligues de Lorraine est là pour répondre à tous vos besoins en matériel sportif. Préparez-vous à vivre des expériences uniques et à repousser vos limites avec nous !</h2>
-            {isAdmin && <p>Vous êtes administrateur.</p>}
-            <div className="products">
-                {products.map(product => (
-                    <div key={product.pid} className="product">
-                        <img src={`http://192.168.1.37:3000/${product.image}`} alt={product.name} />
-                        <h3>{product.name}</h3>
-                    </div>
-                ))}
+        <div>
+            <nav>
+            </nav>
+
+            {/* Contenu principal */}
+            <div className="container">
+                <h1>Bienvenue {userName || 'invité'} ! sur la Maison des Ligues de Lorraine</h1>
+                <h2>Que vous soyez un athlète aguerri ou un amateur passionné, la Maison des Ligues de Lorraine est là pour répondre à tous vos besoins en matériel sportif. Préparez-vous à vivre des expériences uniques et à repousser vos limites avec nous !</h2>
+                {isAdmin && <p>Vous êtes administrateur.</p>}
+                <div className="products-container">
+                    {products.map(product => (
+                        <div key={product.pid} className="product">
+                            <img src={`http://localhost:3000/${product.image}`} alt={product.name} />
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );
