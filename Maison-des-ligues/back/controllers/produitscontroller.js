@@ -181,6 +181,29 @@ exports.getPrixTotalPanier = async (req, res) => {
 };
 exports.supprimerDuPanier = async (req, res) => {
     const { pid, uid } = req.body;
-    await db.execute('DELETE FROM panier WHERE pid = ? AND uid = ?', [pid, uid]);
-    res.status(200).json({ message: 'Produit supprimé du panier avec succès' });
-}; 
+
+    try {
+        // Récupérer la quantité du produit supprimé du panier
+        const [productRow] = await db.execute('SELECT quantity FROM panier WHERE pid = ? AND uid = ?', [pid, uid]);
+        const quantityToRemove = productRow[0].quantity;
+
+        // Restaurer la quantité du produit dans la base de données des produits
+        await db.execute('UPDATE products SET quantity = quantity + ? WHERE pid = ?', [quantityToRemove, pid]);
+
+        // Supprimer le produit du panier
+        await db.execute('DELETE FROM panier WHERE pid = ? AND uid = ?', [pid, uid]);
+
+        res.status(200).json({ message: 'Produit supprimé du panier avec succès' });
+    } catch (error) {
+        console.error('Erreur lors de la suppression du produit du panier :', error);
+        res.status(500).json({ error: 'Une erreur s\'est produite lors de la suppression du produit du panier' });
+    }
+};
+
+
+
+
+
+
+
+
