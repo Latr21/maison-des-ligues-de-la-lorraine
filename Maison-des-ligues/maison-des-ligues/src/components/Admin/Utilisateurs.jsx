@@ -13,7 +13,7 @@ function Utilisateurs() {
         try {
             const token = Cookies.get('token');
 
-            const response = await fetch("http://localhost:3000/api/usersroute/utilisateurs", {
+            const response = await fetch("http://192.168.1.37:3000/api/usersroute/utilisateurs", {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -33,7 +33,7 @@ function Utilisateurs() {
         try {
             const token = Cookies.get('token');
 
-            const response = await fetch(`http://localhost:3000/api/usersroute/utilisateurs/${uid}`, {
+            const response = await fetch(`http://192.168.1.37:3000/api/usersroute/utilisateurs/${uid}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`,

@@ -32,7 +32,7 @@ const Connexion = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch('http://localhost:3000/api/usersroute/connexion', {
+            const response = await fetch('http://192.168.1.37:3000/api/usersroute/connexion', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

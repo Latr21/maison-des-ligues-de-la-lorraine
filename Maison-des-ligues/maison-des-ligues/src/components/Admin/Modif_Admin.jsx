@@ -19,7 +19,7 @@ const Modif_Admin = () => {
         try {
             const token = Cookies.get('token');
 
-            const response = await fetch("http://localhost:3000/api/usersroute/administrateurs", {
+            const response = await fetch("http://192.168.1.37:3000/api/usersroute/administrateurs", {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -41,7 +41,7 @@ const Modif_Admin = () => {
             const hashedPassword = await bcrypt.hash(modificationData.newPassword, 10);
             const token = Cookies.get('token');
 
-            const response = await fetch('http://localhost:3000/api/usersroute/modifieradmin', {
+            const response = await fetch('http://192.168.1.37:3000/api/usersroute/modifieradmin', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
